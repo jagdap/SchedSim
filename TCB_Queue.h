@@ -40,6 +40,11 @@ class TCB_Queue
         //This function will remove the TCB node from the head
         TCBnode* dequeue();
 
+	// ADDED:
+	//This function takes a TCB node from its current location
+	//and places it at the tail
+	int moveToTail(TCBnode* inNode);
+
         //This function displays the queue
         void display();
 

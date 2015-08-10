@@ -32,6 +32,10 @@
 // SCHEDULER
 /*--------------------------------------------------------------------------*/
 
+// Scheduling algorithms
+#define FCFS 0
+#define SJF 1
+
 class Scheduler {
 
 
@@ -59,6 +63,11 @@ public:
 	void set_last_run(long l);
 	long get_last_run();
 
+	// Functions to implement scheduling algorithms
+	void resume_threads();
+	void add_new_threads();
+	void sort_ready_queue();
+	
 };
 	
 

@@ -71,7 +71,7 @@ void init(){
 				str_idx++;
 			}
 			thread_str[str_idx] = '\0';			
-			//printf("%s\n", thread_str);
+			//printf("New Thread: %s\n", thread_str);
 			sched->load_new_job(i, thread_str);
 		}
 	}

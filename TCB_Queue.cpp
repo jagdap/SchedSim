@@ -66,6 +66,8 @@ int TCB_Queue::enqueue(TCBnode* _tcbn)
         _tcbn->prev=this->tail;
         //Update the tail pointer to the new node
         this->tail=_tcbn;
+	// ADDED: make sure the tail doesn't point to anything
+	tail->next = NULL;
     }
     //Else the queue is empty
     else
@@ -121,9 +123,37 @@ TCBnode* TCB_Queue::dequeue()
 
     //Decrement the node size
     this->size--;
-
+	printf("size now: %d \n",size);
     //Return a pointer to the node to be dequeued
     return nodeDQ;
+}
+
+// ADDED:
+//This function moves a TCBnode from its current location and
+//places it at the tail
+//Return values:
+// 0 Successfully moved node
+// 1 Error encountered
+int TCB_Queue::moveToTail(TCBnode* inNode){
+	// Is it at the head?
+	if (inNode == head){
+		head = inNode->next;
+		head->prev = NULL;
+		// Reduce the size before enqueue increases it again
+		size--;
+		return enqueue(inNode);
+	// Is it already at the tail?
+	} else if (inNode == tail){
+		// do nothing
+		return 0;
+	// Is it in the middle, or not in at all?
+	} else{
+		inNode->prev->next = inNode->next;
+		inNode->next->prev = inNode->prev;
+		//Reduce the size before enqueue increases it again
+		size--;
+		return enqueue(inNode);;
+	}	
 }
 
 //This function displays the pid of each node in the queue
@@ -142,7 +172,8 @@ void TCB_Queue::display()
     while(node!=NULL)
     {
         //Print the PID of the current node
-        printf("%d: PID: %d\n",++counter, node->tcb.pid);
+	// ADDED - prints the contents of the process as well
+        printf("%d: PID: %d CONTENTS: %s\n",++counter, node->tcb.pid, node->tcb.program_ctr);
         node=node->next;    //Move the node pointer to the next node
     }
 }

@@ -77,7 +77,8 @@ void Dispatcher::choose_next_thread(){
 	}
 
 	//If this is a scheduled stop
-	if ((cpu_time - sched->get_last_run()) >= SCHED_PERIOD){
+	// ADDED: OR if CPU time is zero (first time through this process)
+	if ((cpu_time - sched->get_last_run()) >= SCHED_PERIOD || cpu_time == 0){
 		//go ahead and advance the clock
 		cpu_time += SCHED_COST;
 		sched->set_last_run(cpu_time);
@@ -92,16 +93,20 @@ void Dispatcher::choose_next_thread(){
 		sched->run_scheduler();
 	}
 
-	//Take the front, it is in no queue after this and before th next save state
-	TCBnode* node;
-	node=sched->rq->dequeue();
-
-	if (node != NULL){
+	printf("rq: %d, wq: %d, nq: %d tq: %d\n",sched->rq->get_size(), sched->wq->get_size(), sched->nq->get_size(), sched->tq->get_size());
+	// If new Q, ready Q and Wait q are empty, load last job
+	if (sched->rq->get_size() == 0 && sched->wq->get_size() == 0 && sched->nq->get_size()==0){
+		new_TCB_node = *sched->get_last_TCBnode();
+	
+	// If new q is not empty, load from it
+	} else if (sched->rq->get_size()>0){
 		//Set it for the next TCB to be loaded
-		new_TCB_node = node;
+		new_TCB_node = sched->rq->dequeue();
 	}
-	else// (new_TCB_node == NULL)
+	// If any of the other two are not empty, load idle
+	else{// (new_TCB_node == NULL)
 		new_TCB_node = *sched->get_idle_TCBnode();
+	}
 }
 
 

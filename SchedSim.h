@@ -17,6 +17,15 @@
 */
 //---------------------------------------------------------
 /*--------------------------------------------------------------------------*/
+// DEFINES - Runtime Options
+/*--------------------------------------------------------------------------*/
+#define FCFS 0
+#define SJF  1
+#define RR8  2
+#define RR16 3
+#define SCHEDALGORITHM SJF
+
+/*--------------------------------------------------------------------------*/
 // DEFINES - General
 /*--------------------------------------------------------------------------*/
 #define ULONG_MAX 4294967295 //Use this value for infinity
@@ -32,15 +41,15 @@
 #define INIT_PROGRAMS 10	//Number of programs to test with
 	//1 is always added at the end for shutting down the CPU
 	//The maximum is bound by the size of the NEW queue
-#define MAX_CPU_BURSTS 1	//Number of CPU bursts, 
+#define MAX_CPU_BURSTS 5	//Number of CPU bursts, 
 	//1 means no wait instructions or queues
 	//The maximum is high enough to not worry about (tried 100)
-#define MAX_CPU_BURST_LENGTH 10 //Maximum number of instructions in a burst
+#define MAX_CPU_BURST_LENGTH 20 //Maximum number of instructions in a burst
 	//The number of E's can be 0 up to at least 100 
 	//W, T or X is always added to the end of any sequence
 #define QUANTUM ULONG_MAX //time limit on the procesor for a RR Queue Mgr
 	// Setting at ULONG_MAX makes the scheduler use FCFS scheduling
-#define SCHED_PERIOD 10000 //time between when scheduler is run
+#define SCHED_PERIOD 1000 //time between when scheduler is run
 	//NOTE: It cannot equal the CONTEXT_SWITCH_COST
 #define END_OF_DISPATCH ULONG_MAX //sets the time the simulation finishes dispatch
 	//END_OF_DISPATCH must be greater than CONTEXT_SWITCH_COST 
